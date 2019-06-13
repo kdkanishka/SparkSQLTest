@@ -103,7 +103,7 @@ object SparkCsvDataProcessing extends App {
     val ft = Future {
       val dfResult = sparkSession.sql(query)
       dfResult.show(20)
-    }g
+    }
     println(s"____________________Done $i ____________________")
     lf = lf :+ ft
   }
