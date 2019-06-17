@@ -29,7 +29,7 @@ object SparkCsvDataProcessing extends App {
 
   lazy val sparkConf = new SparkConf()
     .setAppName("Platform1 JDBC Join")
-    .setMaster("spark://172.17.0.1:7077")
+    .setMaster("spark://172.17.42.1:7077")
     .setJars(Array("/home/kanishka/.ivy2/cache/com.microsoft.sqlserver/mssql-jdbc/jars/mssql-jdbc-7.0.0.jre8.jar"))
   //    .set("spark.cores.max", "2")
 
@@ -97,11 +97,14 @@ object SparkCsvDataProcessing extends App {
 
   var lf = List[Future[Any]]()
 
-  for (i <- 1 to 10) {
+  for (i <- 1 to 2) {
     println(s"__________________Iteration $i __________________")
     //execute query in a thread
     val ft = Future {
-      val dfResult = sparkSession.sql(query)
+//      val dfResult = sparkSession.sql(query)
+
+      //pivot example
+      val dfResult = sparkSession.sql(query).groupBy("ps.PanelistId").pivot("ps.ProjectId").avg("ps.L4")
       dfResult.show(20)
     }
     println(s"____________________Done $i ____________________")
